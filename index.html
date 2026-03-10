@@ -32,7 +32,7 @@
       color: var(--text);
       background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 36%, #020617 100%);
       background-color: #020617;
-      padding: 32px 20px 40px;
+      padding: 40px 20px 40px;
       display: flex;
       justify-content: center;
     }
@@ -58,7 +58,8 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
-    .pill span {
+
+    .pill span:first-child {
       width: 7px;
       height: 7px;
       border-radius: 999px;
@@ -70,7 +71,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      margin-bottom: 32px;
+      margin-bottom: 36px;
     }
 
     .headline-row {
@@ -83,7 +84,8 @@
 
     h1 {
       margin: 0;
-      font-size: clamp(32px, 4vw, 40px);
+      font-size: clamp(30px, 3.4vw, 40px);
+      line-height: 1.1;
       letter-spacing: 0.02em;
     }
 
@@ -131,7 +133,7 @@
     }
 
     @media (max-width: 900px) {
-      body { padding: 26px 16px 32px; }
+      body { padding: 28px 16px 32px; }
       .sections { grid-template-columns: minmax(0, 1fr); }
     }
 
@@ -311,9 +313,9 @@
     </p>
 
     <div class="meta-row">
-      <span><div class="meta-dot"></div> Founder, blu|mark Studio</span>
-      <span><div class="meta-dot"></div> Digital Innovation · AEC · Agritech</span>
-      <span><div class="meta-dot"></div> Python · Agents · Plotly · GitHub Pages</span>
+      <span><span class="meta-dot"></span> Founder, blu|mark Studio</span>
+      <span><span class="meta-dot"></span> Digital Innovation · AEC · Agritech</span>
+      <span><span class="meta-dot"></span> Python · Agents · Plotly · GitHub Pages</span>
     </div>
   </header>
 
