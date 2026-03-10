@@ -23,8 +23,8 @@
                    "Segoe UI", sans-serif;
     }
 
-    * { 
-      box-sizing: border-box; 
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
@@ -51,51 +51,69 @@
 
     .orb-container {
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 260px;
+      height: 260px;
       margin: 0 auto 40px;
+      perspective: 900px; /* adds depth */
     }
 
     .orb {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #38bdf8, #0ea5e9, #0284c7);
-      box-shadow: 
+      background:
+        radial-gradient(circle at 30% 30%, #e0f2fe 0, #38bdf8 24%, #0ea5e9 52%, #0369a1 100%);
+      box-shadow:
         0 0 60px rgba(56, 189, 248, 0.6),
-        inset 0 0 60px rgba(56, 189, 248, 0.2);
-      animation: spin 12s linear infinite;
-      transform-style: preserve-3d;
+        inset -18px -22px 40px rgba(15, 23, 42, 0.9);
       position: relative;
+      transform-style: preserve-3d;
+      animation: spin 18s linear infinite;
     }
 
+    /* bright highlight */
     .orb::before {
       content: '';
       position: absolute;
-      top: 10%;
-      left: 10%;
-      width: 20%;
-      height: 20%;
+      top: 16%;
+      left: 18%;
+      width: 26%;
+      height: 26%;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      filter: blur(2px);
-    }
-
-    .orb::after {
-      content: '';
-      position: absolute;
-      top: 30%;
-      left: 30%;
-      width: 15%;
-      height: 15%;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 60%);
       filter: blur(1px);
     }
 
+    /* equator band to suggest rotation */
+    .orb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 130%;
+      height: 32%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), transparent 60%),
+        linear-gradient(to right,
+          rgba(15, 23, 42, 0.0) 0%,
+          rgba(15, 23, 42, 0.75) 40%,
+          rgba(15, 23, 42, 0.0) 100%);
+      transform-origin: center;
+      transform: rotateX(78deg) translateZ(1px);
+      mix-blend-mode: screen;
+    }
+
     @keyframes spin {
-      0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-      100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+      0% {
+        transform: rotateX(18deg) rotateY(-25deg) rotateZ(0deg);
+      }
+      50% {
+        transform: rotateX(18deg) rotateY(155deg) rotateZ(180deg);
+      }
+      100% {
+        transform: rotateX(18deg) rotateY(335deg) rotateZ(360deg);
+      }
     }
 
     .landing-title {
@@ -417,7 +435,7 @@
       color: var(--accent);
       font-size: 11px;
     }
-    
+
     .back-button {
       position: fixed;
       top: 20px;
@@ -446,10 +464,10 @@
       <div class="orb"></div>
     </div>
     <h1 class="landing-title">blu|mark Studio</h1>
-    <p class="landing-subtitle">Applied AI for Real Estate, Agritech & Transactions</p>
+    <p class="landing-subtitle">Applied AI for Real Estate, Agritech &amp; Transactions</p>
     <div class="nav-buttons">
-      <button class="nav-button" onclick="showPage('python')">Python & Agent Systems</button>
-      <button class="nav-button" onclick="showPage('github')">GitHub Projects & Brand</button>
+      <button class="nav-button" onclick="showPage('python')">Python &amp; Agent Systems</button>
+      <button class="nav-button" onclick="showPage('github')">GitHub Projects &amp; Brand</button>
     </div>
   </div>
 
