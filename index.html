@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>blu|mark Studio – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Portfolio of AI, real estate, and agritech tools by blu|mark Studio." />
+  <style>
+    :root {
+      --bg: #05070a;
+      --bg-soft: #0c1117;
+      --card: #0f1724;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --accent-alt: #a855f7;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 36%, #020617 100%);
+      background-color: #020617;
+      padding: 32px 20px 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .pill span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f9fafb 0, #22c55e 35%, #16a34a 60%, #14532d 100%);
+      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .headline-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 40px);
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--muted);
+    }
+
+    .subcopy {
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .meta-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #4b5563;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 26px 16px 32px; }
+      .sections { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.05), transparent 55%),
+        linear-gradient(to bottom right, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      padding: 14px 14px 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 150ms ease-out, box-shadow 150ms ease-out,
+                  border-color 150ms ease-out, background 150ms ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.8);
+      border-color: rgba(56, 189, 248, 0.55);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 52%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.12), transparent 58%),
+        linear-gradient(to bottom right, rgba(15, 23, 42, 1), rgba(15, 23, 42, 1));
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      padding: 3px 9px;
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .link svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .column-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 58%),
+        linear-gradient(to bottom, #020617, #020617);
+      padding: 18px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .column-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .column-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .column-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid rgba(15, 23, 42, 0.9);
+      padding-top: 12px;
+    }
+
+    footer a {
+      color: var(--accent);
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="pill">
+      <span aria-hidden="true"></span>
+      <span>blu|mark Studio · AI, AEC &amp; Agriculture</span>
+    </div>
+
+    <div class="headline-row">
+      <div>
+        <div class="brand-mark">Lamont Edwards · Grand Rapids, MI</div>
+        <h1>Applied AI for Real&nbsp;Estate, Agritech &amp; Transactions</h1>
+      </div>
+    </div>
+
+    <p class="subcopy">
+      A portfolio of Python tools, agents, and data products built across real estate,
+      CEA agritech, and content workflows. Designed and prototyped with Perplexity–powered
+      systems for underwriting, forecasting, and storytelling.
+    </p>
+
+    <div class="meta-row">
+      <span><div class="meta-dot"></div> Founder, blu|mark Studio</span>
+      <span><div class="meta-dot"></div> Digital Innovation · AEC · Agritech</span>
+      <span><div class="meta-dot"></div> Python · Agents · Plotly · GitHub Pages</span>
+    </div>
+  </header>
+
+  <section class="sections" aria-label="Portfolio">
+    <!-- Left: Python projects -->
+    <section aria-label="Python Applications" class="card-grid">
+      <h2>Python &amp; Agent Systems</h2>
+
+      <!-- 1. Aquisite App -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">Aquisite App – Desktop Marketing &amp; Acquisition Assistant</div>
+          <div class="tag">Python Desktop · Real Estate</div>
+        </div>
+        <div class="card-body">
+          A Python-based desktop assistant for real estate acquisitions, combining lead intake,
+          business-plan building, and AI-assisted marketing content in a single interface for
+          solo operators and small investment teams.
+        </div>
+        <div class="chip-row">
+          <span class="chip">Tkinter / PyQt</span>
+          <span class="chip">LLM Copy Engine</span>
+          <span class="chip">Campaign Tracking</span>
+        </div>
+        <div class="card-footer">
+          <span>Prototype · Active Use</span>
+          <span class="link">Private codebase</span>
+        </div>
+      </article>
+
+      <!-- 2. Moirai Forecasting -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">Moirai Forecasting – uni2ts Time‑Series Toolkit</div>
+          <div class="tag">Python · Time‑Series</div>
+        </div>
+        <div class="card-body">
+          A Moirai-style forecasting pipeline using uni2ts to model multi-year cash flows for
+          properties like Lake Grove and to simulate climate and energy profiles for the Grand
+          Rapids CEA Agritech Hub.
+        </div>
+        <div class="chip-row">
+          <span class="chip">pandas · numpy</span>
+          <span class="chip">uni2ts / Moirai</span>
+          <span class="chip">Scenario Analysis</span>
+        </div>
+        <div class="card-footer">
+          <span>Research &amp; Operations</span>
+          <span class="link">Private notebooks &amp; scripts</span>
+        </div>
+      </article>
+
+      <!-- 3. TTS Generator GUI -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">TTS Generator – Creator Voiceover Tool</div>
+          <div class="tag">Python GUI · Media</div>
+        </div>
+        <div class="card-body">
+          A fast text‑to‑speech desktop GUI for Instagram Reels and short‑form content, offering
+          fine-grained control over pacing, pitch, and style with export to MP3/WAV and reusable
+          presets per series.
+        </div>
+        <div class="chip-row">
+          <span class="chip">Tkinter / PyQt</span>
+          <span class="chip">TTS APIs</span>
+          <span class="chip">Content Workflows</span>
+        </div>
+        <div class="card-footer">
+          <span>Production Utility</span>
+          <span class="link">Private codebase</span>
+        </div>
+      </article>
+
+      <!-- 4. Real Estate Analytics & Plotly -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">Real Estate Analytics &amp; Plotly Visualization Toolkit</div>
+          <div class="tag">Python · Analytics</div>
+        </div>
+        <div class="card-body">
+          A collection of scripts and notebooks for portfolio modeling, BIM-linked metrics, and
+          investor-ready Plotly charts, supporting IRR/DSCR analysis, cap-rate scenarios, and
+          BIM-derived area and cost breakdowns.
+        </div>
+        <div class="chip-row">
+          <span class="chip">pandas · Plotly</span>
+          <span class="chip">BIM Metrics</span>
+          <span class="chip">HD Exports</span>
+        </div>
+        <div class="card-footer">
+          <span>Toolkit · Case Studies</span>
+          <span class="link">Private scripts &amp; models</span>
+        </div>
+      </article>
+
+      <!-- 5. Autonomous Real Estate Agent -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">Autonomous Real Estate Transaction Agent</div>
+          <div class="tag">Python · Agents</div>
+        </div>
+        <div class="card-body">
+          An experimental LLM-based agent system that orchestrates listing search, parcel data
+          aggregation, basic underwriting, and drafting of LOIs, outreach emails, and internal
+          memos with stateful deal conversations.
+        </div>
+        <div class="chip-row">
+          <span class="chip">LLM Orchestration</span>
+          <span class="chip">HTTP APIs</span>
+          <span class="chip">Deal Workflows</span>
+        </div>
+        <div class="card-footer">
+          <span>Early‑Stage Prototype</span>
+          <span class="link">Perplexity‑powered flows</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Right: Public GitHub repos & brand -->
+    <aside aria-label="GitHub Projects & Brand">
+      <h2>GitHub Projects &amp; Brand</h2>
+
+      <article class="column-card">
+        <div class="column-title">Grand Rapids CEA Agritech Hub</div>
+        <div class="column-body">
+          Public hub for controlled-environment agriculture, digital twin concepts,
+          and open data around climate-resilient food systems in Grand Rapids,
+          with GitHub Pages–backed storytelling. [Deployed repo]
+        </div>
+        <div class="column-chip-row">
+          <span class="chip">CEA · Digital Twin</span>
+          <span class="chip">GitHub Pages</span>
+          <span class="chip">Open Data Narrative</span>
+        </div>
+        <a class="link" href="https://edwardslamont616-cell.github.io/Grand-Rapids-CEA-Agritech-Hub/" target="_blank" rel="noopener noreferrer">
+          <span>View Agritech Hub</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path fill="currentColor" d="M5 15l7-7v5h2V5H7v2h5l-7 7z"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="column-card">
+        <div class="column-title">Author Group – AI‑Powered Real Estate</div>
+        <div class="column-body">
+          A GitHub Pages site showcasing AI‑powered real estate experiences and premium
+          property storytelling across Grand Rapids, integrating modern web layouts with
+          data-informed narratives.
+        </div>
+        <div class="column-chip-row">
+          <span class="chip">Real Estate Web</span>
+          <span class="chip">HTML · CSS</span>
+          <span class="chip">Property Storytelling</span>
+        </div>
+        <a class="link" href="https://edwardslamont616-cell.github.io/Author-Group/" target="_blank" rel="noopener noreferrer">
+          <span>Visit Author Group</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path fill="currentColor" d="M5 15l7-7v5h2V5H7v2h5l-7 7z"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="column-card">
+        <div class="column-title">Utopian House</div>
+        <div class="column-body">
+          A Swift-based exploration into future‑of‑living concepts, tying together design,
+          technology, and urban systems thinking as part of the broader blu|mark concept
+          studio for built environments.
+        </div>
+        <div class="column-chip-row">
+          <span class="chip">Swift</span>
+          <span class="chip">Future of Living</span>
+          <span class="chip">Concept App</span>
+        </div>
+        <a class="link" href="https://github.com/edwardslamont616-cell/Utopian-House" target="_blank" rel="noopener noreferrer">
+          <span>View on GitHub</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path fill="currentColor" d="M5 15l7-7v5h2V5H7v2h5l-7 7z"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="column-card">
+        <div class="column-title">Built with Perplexity‑Powered Systems</div>
+        <div class="column-body">
+          Many of these prototypes and tools were co‑developed with Perplexity‑powered
+          workflows for research, planning, and agent orchestration—accelerating from idea
+          to functional code and narrative assets.
+        </div>
+        <div class="column-chip-row">
+          <span class="chip">AI‑Assisted Dev</span>
+          <span class="chip">Research Co‑pilot</span>
+          <span class="chip">Agent Design</span>
+        </div>
+      </article>
+    </aside>
+  </section>
+
+  <footer>
+    <span>© <span id="year"></span> blu|mark Studio · Lamont Edwards</span>
+    <span>Grand Rapids, Michigan · Digital Innovation · Real Estate · Agritech</span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</main>
+</body>
+</html>
