@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Roots of the Land — CEA Investor Narrative</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bg: #0d1a0e;
+            --color-bg-deep: #070f07;
+            --color-surface: #162018;
+            --color-text: #f0ede6;
+            --color-text-secondary: #c8c2b4;
+            --color-text-muted: #8a8478;
+            --color-accent-1: #7eb84a;
+            --color-accent-2: #d4a84b;
+            --color-accent-3: #4a9e6e;
+            --color-glass-bg: rgba(255,255,255,0.05);
+            --color-glass-border: rgba(255,255,255,0.08);
+            --color-vignette: rgba(0,0,0,0.55);
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Work Sans', system-ui, sans-serif;
+        }
+    </style>
+
+    <style>
+        :root {
+            --color-bg: #0d1a0e;
+            --color-text: #f0ede6;
+            --glow-color-rgb: 126,184,74;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; }
+        body { font-family: 'Work Sans', system-ui, sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+        .deck { width: 100vw; height: 100vh; position: relative; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 4rem); }
+        .nav-controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.08); }
+        .nav-btn { width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.05); color: #7eb84a; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #7eb84a; transform: scale(1.3); }
+        .slide-counter { font-size: 0.8rem; color: #8a8478; min-width: 40px; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        /* Glow */
+        .text-glow { text-shadow: 0 0 20px rgba(126,184,74,0.5), 0 0 40px rgba(126,184,74,0.2); }
+        .stat-glow { text-shadow: 0 0 30px rgba(212,168,75,0.6), 0 0 60px rgba(212,168,75,0.25); }
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(126,184,74,0.5), 0 0 40px rgba(126,184,74,0.2); }
+            50% { text-shadow: 0 0 30px rgba(126,184,74,0.8), 0 0 60px rgba(126,184,74,0.3); }
+        }
+        .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+
+        /* Gold glow for accent */
+        .gold-glow { text-shadow: 0 0 20px rgba(212,168,75,0.6), 0 0 40px rgba(212,168,75,0.25); }
+
+        /* Gradient mesh blobs */
+        @keyframes float-slow {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -50px) scale(1.12); }
+            50% { transform: translate(-40px, 40px) scale(0.9); }
+            75% { transform: translate(50px, 20px) scale(1.08); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        @keyframes float-drift {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(-50px, -60px) scale(1.15) rotate(3deg); }
+            66% { transform: translate(40px, 30px) scale(0.88) rotate(-2deg); }
+            100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 10s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 14s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 18s ease-in-out infinite reverse; }
+        .blob:nth-child(4) { animation: float-drift 22s ease-in-out infinite reverse; }
+
+        /* Noise + vignette */
+        .slide::before {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 256px 256px; opacity: 0.04; mix-blend-mode: overlay;
+        }
+        .slide::after {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 50%, var(--color-vignette) 100%);
+        }
+
+        /* Horizontal bar */
+        .bar-track { background: rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden; height: 28px; position: relative; }
+        .bar-fill { height: 100%; border-radius: 8px; width: 0%; transition: width 0.8s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 0.75rem; font-weight: 600; color: #0d1a0e; }
+
+        /* Timeline */
+        .timeline-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #7eb84a, #d4a84b, #4a9e6e); }
+        .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: #7eb84a; box-shadow: 0 0 12px rgba(126,184,74,0.6); flex-shrink: 0; }
+        .timeline-dot.gold { background: #d4a84b; box-shadow: 0 0 12px rgba(212,168,75,0.6); }
+        .timeline-dot.teal { background: #4a9e6e; box-shadow: 0 0 12px rgba(74,158,110,0.6); }
+
+        /* Crop icon row */
+        .crop-icon { font-size: 2.4rem; filter: drop-shadow(0 0 8px rgba(126,184,74,0.4)); }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+        }
+
+        /* Deco shapes */
+        .deco-shape { position: absolute; pointer-events: none; will-change: transform; }
+    </style>
+</head>
+<body>
+
+<div class="mouse-spotlight" style="position:fixed;inset:0;z-index:99;pointer-events:none;"></div>
+
+<div class="deck">
+
+    <!-- SLIDE 1: TITLE -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:520px;height:520px;top:-120px;right:-100px;background:#7eb84a;opacity:0.14;"></div>
+            <div class="blob" style="width:350px;height:350px;bottom:-80px;left:-60px;background:#d4a84b;opacity:0.12;"></div>
+            <div class="blob" style="width:220px;height:220px;top:40%;left:15%;background:#4a9e6e;opacity:0.10;"></div>
+            <div class="blob" style="width:180px;height:180px;bottom:20%;right:20%;background:#7eb84a;opacity:0.07;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content text-center">
+            <div style="font-size:90px;margin-bottom:1.5rem;animation:float 4s ease-in-out infinite;" class="reveal">🌱</div>
+            <h1 class="font-display reveal" style="font-size:clamp(2.6rem,6vw,5rem);font-weight:900;background:linear-gradient(135deg,#7eb84a,#d4a84b,#7eb84a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-0.02em;">Roots of the Land</h1>
+            <p class="reveal" style="font-size:clamp(0.9rem,1.5vw,1.3rem);letter-spacing:0.25em;text-transform:uppercase;color:#8a8478;margin-bottom:0.6rem;font-weight:400;">A CEA Facility Investment Narrative</p>
+            <p class="reveal" style="font-size:clamp(0.85rem,1.2vw,1.1rem);color:#4a9e6e;font-style:italic;letter-spacing:0.08em;">"The land remembers what the people carried."</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: THE THESIS (exec summary) -->
+    <div class="slide slide-2" data-slide="2">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:380px;height:380px;top:-80px;right:-80px;background:#7eb84a;opacity:0.09;"></div>
+            <div class="blob" style="width:260px;height:260px;bottom:-60px;left:-40px;background:#d4a84b;opacity:0.07;"></div>
+        </div>
+        <div class="deco-shape" data-speed="0.03" style="width:200px;height:200px;border-radius:50%;border:1px solid rgba(126,184,74,0.08);top:10%;left:5%;"></div>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.12);border:1px solid rgba(126,184,74,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:1.2rem;">The Thesis</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.15;margin-bottom:1.8rem;max-width:800px;">Six generations of agricultural knowledge, <em style="color:#d4a84b;">finally farming on its own terms.</em></h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;">
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-left:3px solid #7eb84a;border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">🌾</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:0.4rem;">Maternal Heritage</div>
+                    <p style="font-size:0.9rem;color:#c8c2b4;line-height:1.5;margin:0;">Cotton cultivation spanning Chickasaw &amp; Lee Counties, Mississippi — from enslaved labor through sharecropping, across 5 generations.</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-left:3px solid #d4a84b;border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">🌾</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:0.4rem;">Paternal Heritage</div>
+                    <p style="font-size:0.9rem;color:#c8c2b4;line-height:1.5;margin:0;">Rice, cotton, corn &amp; sweet potato cultivation across Acadia Parish, Louisiana and East Texas — knowledge rooted in West African tradition.</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-left:3px solid #4a9e6e;border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">🏭</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9e6e;margin-bottom:0.4rem;">The Convergence</div>
+                    <p style="font-size:0.9rem;color:#c8c2b4;line-height:1.5;margin:0;">Grand Rapids, Michigan — where the Great Migration ended and Controlled Environment Agriculture begins the next chapter.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: THE COTTON CHAPTER -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-100px;left:-80px;background:#d4a84b;opacity:0.11;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-60px;right:-40px;background:#7eb84a;opacity:0.08;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="deco-shape" data-speed="0.025" style="width:300px;height:300px;border-radius:50%;border:1px solid rgba(212,168,75,0.07);bottom:5%;right:8%;"></div>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(212,168,75,0.1);border:1px solid rgba(212,168,75,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:1rem;">Maternal Line · Mississippi · 1830s–1960s</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:0.8rem;">Chapter I: <em style="color:#d4a84b;">Cotton</em></h2>
+            <p class="reveal" style="font-size:1.05rem;color:#c8c2b4;max-width:700px;line-height:1.7;margin-bottom:1.6rem;">The story begins in the cotton belt of Chickasaw County, Mississippi — a region so dominated by plantation agriculture that by 1860, the enslaved population outnumbered the white population by roughly <strong style="color:#f0ede6;">2,000 souls</strong>. Cotton was not a crop. It was a system of total economic control, built entirely on unfree labor.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.4rem;">
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:0.6rem;">Crop: Upland Cotton</div>
+                    <p style="font-size:0.88rem;color:#c8c2b4;line-height:1.6;margin:0;">Planted March–May. Picked September–November by hand. The same families who were enslaved to grow it became sharecroppers growing it — paying <strong style="color:#f0ede6;">30–50% of their crop</strong> as rent to the landowner after emancipation.</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.4rem;">
+                    <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:0.6rem;">The Debt Machine</div>
+                    <p style="font-size:0.88rem;color:#c8c2b4;line-height:1.6;margin:0;">Furnishing merchants — the only available credit — charged <strong style="color:#f0ede6;">25–65% interest</strong> on seeds, tools, and food. Season after season, the crop paid the debt. Season after season, the debt remained. A family's soil knowledge was real. Their land ownership was not.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: THE COTTON CONTINUED — Lee County -->
+    <div class="slide slide-4" data-slide="4">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:360px;height:360px;top:-80px;right:-70px;background:#d4a84b;opacity:0.10;"></div>
+            <div class="blob" style="width:240px;height:240px;bottom:-50px;left:-30px;background:#7eb84a;opacity:0.07;"></div>
+        </div>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(212,168,75,0.1);border:1px solid rgba(212,168,75,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:1rem;">Lee County, Mississippi · Verona–Corinth–Tupelo</div>
+            <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:1.5rem;">Three communities. <em style="color:#d4a84b;">One county. One crop.</em></h2>
+            <p class="reveal" style="font-size:1rem;color:#c8c2b4;max-width:720px;line-height:1.7;margin-bottom:1.5rem;">In Lee County's Verona-Corinth corridor and the county seat of Tupelo, three distinct sharecropping families worked adjacent cotton fields — connected by soil, by church, and by the slow-burning desire to leave. They would eventually leave together, following paths blazed northward to Michigan. A family member known only as "Uncle Peter" maintained a farm in the Verona area — a rare, stubborn act of Black land ownership in an era designed to make it impossible.</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+                <div class="reveal" style="text-align:center;background:rgba(212,168,75,0.07);border:1px solid rgba(212,168,75,0.12);border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🌾</div>
+                    <div style="font-size:1.6rem;font-weight:800;color:#d4a84b;" class="stat-glow">Cotton</div>
+                    <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem;">Primary Crop</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(126,184,74,0.07);border:1px solid rgba(126,184,74,0.12);border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🗓️</div>
+                    <div style="font-size:1.6rem;font-weight:800;color:#7eb84a;" class="text-glow">~80 yrs</div>
+                    <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem;">Sharecropping Span</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(74,158,110,0.07);border:1px solid rgba(74,158,110,0.12);border-radius:10px;padding:1.2rem;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🚂</div>
+                    <div style="font-size:1.6rem;font-weight:800;color:#4a9e6e;">North</div>
+                    <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.3rem;">Chicago → Grand Rapids</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: RICE — Louisiana -->
+    <div class="slide slide-5" data-slide="5">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:450px;height:450px;top:-100px;right:-90px;background:#4a9e6e;opacity:0.13;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-70px;left:-50px;background:#7eb84a;opacity:0.09;"></div>
+            <div class="blob" style="width:200px;height:200px;top:30%;left:10%;background:#d4a84b;opacity:0.07;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(74,158,110,0.12);border:1px solid rgba(74,158,110,0.22);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9e6e;margin-bottom:1rem;">Paternal Line · Acadia Parish, Louisiana</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:0.8rem;">Chapter II: <em style="color:#4a9e6e;">Rice</em></h2>
+            <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:2rem;align-items:center;">
+                <div>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin-bottom:1rem;">The paternal line traces to Louisiana's Acadia Parish — the center of America's rice industry. But rice in Louisiana is not a European story. It is a West African one. Enslaved people brought from the Senegambia region arrived already carrying centuries of rice cultivation knowledge: seed selection, water management, field flooding, and harvest timing.</p>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin:0;">These were not passive laborers. They were the technical experts without whom Louisiana's rice economy would not have functioned. After the Civil War, commercial rice production shifted to the prairies of Acadiana — and Black families continued to grow rice, cotton, sweet potatoes, and corn as agricultural laborers in the same fields their ancestors had engineered.</p>
+                </div>
+                <div>
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(74,158,110,0.2);border-radius:12px;padding:1.4rem;">
+                        <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9e6e;margin-bottom:1rem;">Acadia Parish Crop Portfolio</div>
+                        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;"><span style="color:#c8c2b4;">Rice</span><span style="color:#4a9e6e;font-weight:600;">Primary</span></div>
+                                <div class="bar-track"><div class="bar-fill" data-width="90" style="background:linear-gradient(to right,#4a9e6e,#7eb84a);">90%</div></div>
+                            </div>
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;"><span style="color:#c8c2b4;">Cotton</span><span style="color:#d4a84b;font-weight:600;">Secondary</span></div>
+                                <div class="bar-track"><div class="bar-fill" data-width="60" style="background:linear-gradient(to right,#d4a84b,#c8c2b4);">60%</div></div>
+                            </div>
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;"><span style="color:#c8c2b4;">Sweet Potato &amp; Corn</span><span style="color:#7eb84a;font-weight:600;">Subsistence</span></div>
+                                <div class="bar-track"><div class="bar-fill" data-width="40" style="background:linear-gradient(to right,#7eb84a,#4a9e6e);">40%</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="reveal" style="font-size:0.78rem;color:#8a8478;font-style:italic;margin-top:0.7rem;text-align:center;">West African rice knowledge: ~1,000 years old before arrival in Louisiana</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: EAST TEXAS — Mixed Agriculture -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-100px;left:-80px;background:#7eb84a;opacity:0.10;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-70px;right:-50px;background:#d4a84b;opacity:0.09;"></div>
+        </div>
+        <div class="deco-shape" data-speed="0.02" style="width:250px;height:250px;border-radius:50%;border:1px solid rgba(212,168,75,0.06);top:8%;right:5%;"></div>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(212,168,75,0.1);border:1px solid rgba(212,168,75,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:1rem;">Paternal Line · East Texas · Navarro, Rusk &amp; Titus Counties</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;">Chapter III: <em style="color:#d4a84b;">The Mixed Field</em></h2>
+            <p class="reveal" style="font-size:1rem;color:#c8c2b4;max-width:720px;line-height:1.7;margin-bottom:1.4rem;">By 1860, <strong style="color:#f0ede6;">92% of Rusk County's population farmed</strong> — one of the highest agricultural densities in the American South. Enslaved African Americans had cleared old-growth forests and built this agricultural economy from nothing. What they grew was not cotton alone. It was a living knowledge system: diverse, adaptive, and deeply skilled.</p>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0.8rem;margin-bottom:1.2rem;">
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🌾</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Cotton</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🌽</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Corn</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🍠</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Sweet Potato</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🫘</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Peas &amp; Beans</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🌾</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Oats</div>
+                </div>
+                <div class="reveal" style="text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 0.4rem;">
+                    <div class="crop-icon">🍬</div>
+                    <div style="font-size:0.72rem;color:#c8c2b4;margin-top:0.4rem;">Sugar-Cane</div>
+                </div>
+            </div>
+            <div class="reveal" style="background:rgba(212,168,75,0.07);border-left:3px solid #d4a84b;border-radius:0 8px 8px 0;padding:0.8rem 1rem;font-size:0.88rem;color:#c8c2b4;font-style:italic;">"The East Texas agricultural story is one of extraordinary diversity — not the monoculture of Mississippi cotton, but a broader range of crops and skills that Black families developed under enslavement and carried forward into freedom."</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: THE GREAT MIGRATION AS AGRICULTURAL EXODUS -->
+    <div class="slide slide-7" data-slide="7">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:420px;height:420px;top:-100px;right:-80px;background:#7eb84a;opacity:0.10;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-60px;left:-40px;background:#4a9e6e;opacity:0.08;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.1);border:1px solid rgba(126,184,74,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:1rem;">1910–1970 · The Great Migration</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;">The Soil Left Too. <em style="color:#7eb84a;">Just Differently.</em></h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+                <div>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin-bottom:1rem;">Between 1910 and 1970, <strong style="color:#f0ede6;">6.5 million Black Americans</strong> left the South — not in abandonment of the land, but in strategic retreat from an exploitative system. They carried with them something no landlord could seize and no merchant could charge interest on: an intimate understanding of planting cycles, soil preparation, seed selection, water management, and animal husbandry.</p>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin:0;">The Great Migration was an agricultural diaspora. The cotton of Mississippi, the rice of Louisiana, the mixed fields of East Texas — all of it traveled north in the hands, habits, and memories of the people who had grown it. In Grand Rapids, Michigan, these two agricultural lineages converged — one from the Deep South's cotton belt, one from Louisiana rice country and East Texas mixed farms — and eventually, a new generation was born.</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;">
+                        <div style="font-size:2rem;font-weight:900;color:#7eb84a;" class="text-glow" data-count="6500000" data-suffix="">6.5M</div>
+                        <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem;">Black Americans left the South</div>
+                    </div>
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;">
+                        <div style="font-size:2rem;font-weight:900;color:#d4a84b;" class="stat-glow">~60 yrs</div>
+                        <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem;">Migration span, 1910–1970</div>
+                    </div>
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;">
+                        <div style="font-size:2rem;font-weight:900;color:#4a9e6e;">Grand Rapids</div>
+                        <div style="font-size:0.75rem;color:#8a8478;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem;">Convergence point · Michigan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: CROPS → CEA BRIDGE -->
+    <div class="slide slide-8" data-slide="8">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:480px;height:480px;top:-120px;right:-100px;background:#7eb84a;opacity:0.12;"></div>
+            <div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:#d4a84b;opacity:0.10;"></div>
+            <div class="blob" style="width:200px;height:200px;top:45%;left:20%;background:#4a9e6e;opacity:0.08;"></div>
+        </div>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.1);border:1px solid rgba(126,184,74,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:1rem;">The Inheritance</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.4rem;">What the crops <em style="color:#7eb84a;">taught.</em></h2>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.3rem;">
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">🌾</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:0.5rem;">Cotton</div>
+                    <div style="font-size:0.78rem;font-weight:600;color:#f0ede6;margin-bottom:0.4rem;">Planting cycles &amp; seasonal timing</div>
+                    <p style="font-size:0.82rem;color:#8a8478;line-height:1.5;margin:0;">→ CEA equivalent: photoperiod control, grow-cycle scheduling, harvest optimization</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.3rem;">
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">🌾</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9e6e;margin-bottom:0.5rem;">Rice</div>
+                    <div style="font-size:0.78rem;font-weight:600;color:#f0ede6;margin-bottom:0.4rem;">Water management &amp; flood timing</div>
+                    <p style="font-size:0.82rem;color:#8a8478;line-height:1.5;margin:0;">→ CEA equivalent: precision irrigation, nutrient-solution delivery, hydroponic water cycling</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.3rem;">
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">🌽🍠🫘</div>
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:0.5rem;">Corn, Sweet Potato, Peas</div>
+                    <div style="font-size:0.78rem;font-weight:600;color:#f0ede6;margin-bottom:0.4rem;">Crop diversity &amp; yield management</div>
+                    <p style="font-size:0.82rem;color:#8a8478;line-height:1.5;margin:0;">→ CEA equivalent: multi-crop grow room design, staggered harvesting, year-round production</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: THE INVERSION — CEA as Fulfillment -->
+    <div class="slide slide-9" data-slide="9">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:460px;height:460px;top:-100px;left:-90px;background:#7eb84a;opacity:0.13;"></div>
+            <div class="blob" style="width:320px;height:320px;bottom:-80px;right:-60px;background:#4a9e6e;opacity:0.10;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.1);border:1px solid rgba(126,184,74,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:1rem;">Grand Rapids, Michigan · 21st Century</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;">Chapter IV: <em style="color:#7eb84a;">Controlled Environment Agriculture</em></h2>
+            <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:center;">
+                <div>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin-bottom:1rem;">Where six generations of ancestors were <em>bound to the soil by chains and debt</em>, the CEA facility approaches agriculture through <strong style="color:#7eb84a;">technology and ownership</strong>. This is not a return to farming. It is the fulfillment of what those farmers always deserved — growing on their own terms, with their own resources, free from the exploitative systems that defined their lives.</p>
+                    <p class="reveal" style="font-size:1rem;color:#c8c2b4;line-height:1.7;margin-bottom:1rem;">CEA with its controlled growing environments, precision nutrient delivery, and year-round production achieves what sharecropping deliberately prevented: <strong style="color:#f0ede6;">accumulation, ownership, and generational transfer of agricultural value.</strong></p>
+                    <div class="reveal" style="background:rgba(126,184,74,0.07);border-left:3px solid #7eb84a;border-radius:0 8px 8px 0;padding:0.8rem 1rem;font-size:0.9rem;color:#c8c2b4;font-style:italic;">"Agricultural stewardship reimagined for a new century — the deep relationship with the land that generations of this family have known."</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.9rem;">
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1rem;">
+                        <div style="font-size:1.8rem;">🌿</div>
+                        <div>
+                            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#7eb84a;margin-bottom:0.2rem;">CEA vs. Traditional</div>
+                            <div style="font-size:0.88rem;color:#c8c2b4;">Up to <strong style="color:#f0ede6;">25×</strong> the crop density per sq. ft.</div>
+                        </div>
+                    </div>
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1rem;">
+                        <div style="font-size:1.8rem;">💧</div>
+                        <div>
+                            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#4a9e6e;margin-bottom:0.2rem;">Water Efficiency</div>
+                            <div style="font-size:0.88rem;color:#c8c2b4;">Up to <strong style="color:#f0ede6;">95%</strong> less water than field farming</div>
+                        </div>
+                    </div>
+                    <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1rem;">
+                        <div style="font-size:1.8rem;">📅</div>
+                        <div>
+                            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#d4a84b;margin-bottom:0.2rem;">Seasonal Liberation</div>
+                            <div style="font-size:0.88rem;color:#c8c2b4;"><strong style="color:#f0ede6;">Year-round</strong> production — no planting seasons, no harvest reckoning</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: THE LINEAGE TIMELINE -->
+    <div class="slide slide-10" data-slide="10">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:380px;height:380px;top:-80px;right:-70px;background:#7eb84a;opacity:0.09;"></div>
+            <div class="blob" style="width:260px;height:260px;bottom:-60px;left:-40px;background:#d4a84b;opacity:0.07;"></div>
+        </div>
+        <div class="content">
+            <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:1.6rem;">A Continuous <em style="color:#7eb84a;">Agricultural Thread</em></h2>
+            <div style="position:relative;padding-left:52px;">
+                <div class="timeline-line"></div>
+                <div style="display:flex;flex-direction:column;gap:1.1rem;">
+                    <div class="reveal" style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div class="timeline-dot gold" style="margin-top:4px;margin-left:-47px;"></div>
+                        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 1rem;flex:1;">
+                            <div style="font-size:0.7rem;color:#d4a84b;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">1830s–1860s</div>
+                            <div style="font-size:0.9rem;font-weight:600;">Chickasaw County, MS &amp; Acadia Parish, LA</div>
+                            <div style="font-size:0.82rem;color:#8a8478;margin-top:0.2rem;">Cotton under bondage (MS) · Rice cultivation from Senegambian tradition (LA)</div>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div class="timeline-dot" style="margin-top:4px;margin-left:-47px;"></div>
+                        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 1rem;flex:1;">
+                            <div style="font-size:0.7rem;color:#7eb84a;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">1865–1930s</div>
+                            <div style="font-size:0.9rem;font-weight:600;">Lee County, MS &amp; East Texas</div>
+                            <div style="font-size:0.82rem;color:#8a8478;margin-top:0.2rem;">Cotton sharecropping (MS) · Cotton, corn, sweet potato, peas, oats, sugar-cane (TX)</div>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div class="timeline-dot teal" style="margin-top:4px;margin-left:-47px;"></div>
+                        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem 1rem;flex:1;">
+                            <div style="font-size:0.7rem;color:#4a9e6e;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">1940s–1970s</div>
+                            <div style="font-size:0.9rem;font-weight:600;">The Great Migration → Grand Rapids, MI</div>
+                            <div style="font-size:0.82rem;color:#8a8478;margin-top:0.2rem;">Agricultural knowledge carried north · Two lineages converge in one city</div>
+                        </div>
+                    </div>
+                    <div class="reveal" style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div class="timeline-dot gold" style="margin-top:4px;margin-left:-47px;background:linear-gradient(135deg,#7eb84a,#d4a84b);"></div>
+                        <div style="background:rgba(126,184,74,0.08);border:1px solid rgba(126,184,74,0.18);border-radius:8px;padding:0.8rem 1rem;flex:1;">
+                            <div style="font-size:0.7rem;color:#7eb84a;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">2026 → </div>
+                            <div style="font-size:0.9rem;font-weight:600;color:#7eb84a;">Grand Rapids CEA Facility</div>
+                            <div style="font-size:0.82rem;color:#8a8478;margin-top:0.2rem;">Year-round production · Precision growing · Ownership — not tenancy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: THE INVESTMENT CASE -->
+    <div class="slide slide-11" data-slide="11">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-120px;right:-100px;background:#7eb84a;opacity:0.13;"></div>
+            <div class="blob" style="width:340px;height:340px;bottom:-90px;left:-70px;background:#d4a84b;opacity:0.10;"></div>
+            <div class="blob" style="width:220px;height:220px;top:35%;left:8%;background:#4a9e6e;opacity:0.08;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.1);border:1px solid rgba(126,184,74,0.2);border-radius:20px;padding:0.3rem 1rem;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:1rem;">The Investment Case</div>
+            <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.5rem;">You are not investing in a facility. <br><em style="color:#d4a84b;">You are investing in what the land already knows.</em></h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;">
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.4rem;">
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#7eb84a;margin-bottom:0.8rem;">Soil Credibility</div>
+                    <p style="font-size:0.88rem;color:#c8c2b4;line-height:1.6;margin:0;">Six generations of agricultural expertise — from cotton cycle management in Mississippi to rice field engineering in Louisiana — carried as embodied knowledge into modern CEA practice.</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.4rem;">
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4a84b;margin-bottom:0.8rem;">Place Rootedness</div>
+                    <p style="font-size:0.88rem;color:#c8c2b4;line-height:1.6;margin:0;">Grand Rapids is not an arbitrary location. It is the terminal point of a 100-year migration — the city where both lineages converged. This facility belongs here. The community already knows this story; they lived it.</p>
+                </div>
+                <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.4rem;">
+                    <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#4a9e6e;margin-bottom:0.8rem;">The Inversion</div>
+                    <p style="font-size:0.88rem;color:#c8c2b4;line-height:1.6;margin:0;">Sharecropping extracted agricultural labor with no path to ownership. CEA is the structural inversion: technology-enabled, year-round production under full ownership — farming on one's own terms, finally.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: CLOSING -->
+    <div class="slide slide-12" data-slide="12">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:540px;height:540px;top:-120px;right:-110px;background:#7eb84a;opacity:0.15;"></div>
+            <div class="blob" style="width:380px;height:380px;bottom:-90px;left:-70px;background:#d4a84b;opacity:0.12;"></div>
+            <div class="blob" style="width:250px;height:250px;top:40%;left:15%;background:#4a9e6e;opacity:0.10;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content text-center">
+            <div style="font-size:90px;margin-bottom:1.5rem;animation:float 4s ease-in-out infinite;" class="reveal">🌿</div>
+            <h1 class="font-display reveal" style="font-size:clamp(2.2rem,5vw,4rem);font-weight:900;background:linear-gradient(135deg,#7eb84a,#d4a84b,#4a9e6e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:1rem;">The land remembers.</h1>
+            <p class="reveal" style="font-size:clamp(1rem,2vw,1.4rem);color:#c8c2b4;max-width:700px;margin:0 auto 1.5rem;line-height:1.7;">Cotton. Rice. Corn. Sweet potato. Peas. Oats. Six generations of crops grown under coercion, carried north through the Great Migration, and now — through Controlled Environment Agriculture — grown on their own terms, in their own city, for the first time.</p>
+            <div class="reveal" style="display:inline-block;background:rgba(126,184,74,0.12);border:1px solid rgba(126,184,74,0.25);border-radius:12px;padding:0.9rem 2.2rem;font-size:0.9rem;letter-spacing:0.12em;text-transform:uppercase;color:#7eb84a;font-weight:600;">Grand Rapids CEA Facility · 2026</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 12</span>
+</div>
+
+<script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    for (let i = 1; i <= total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; updateNav();
+    }
+    function changeSlide(dir) { let next = current + dir; if (next < 1) next = total; if (next > total) next = 1; goToSlide(next); }
+    function updateNav() {
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current));
+        counter.textContent = current + ' / ' + total;
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); });
+
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight;
+            const delay = i * 0.08;
+            el.style.transition = `opacity 0.35s ease ${delay}s, transform 0.35s ease ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+        animateSlideEffects(slide);
+    }
+
+    function animateSlideEffects(slide) {
+        slide.querySelectorAll('.bar-fill:not(.fill-init)').forEach((bar, i) => {
+            bar.classList.add('fill-init');
+            bar.style.width = '0%';
+            bar.style.transition = `width 0.7s ease ${i * 0.1}s`;
+            bar.offsetHeight;
+            bar.style.width = bar.dataset.width + '%';
+        });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        const spotlight = document.querySelector('.mouse-spotlight');
+        if (spotlight) {
+            spotlight.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(126,184,74,0.055), transparent 40%)`;
+        }
+    });
+
+    (function() {
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        (function tick() {
+            const ox = (mouseX - cx) / cx, oy = (mouseY - cy) / cy;
+            document.querySelectorAll('.deco-shape').forEach(shape => {
+                const speed = parseFloat(shape.dataset.speed) || 0.03;
+                shape.style.transform = `translate(${ox * speed * 100}px, ${oy * speed * 100}px)`;
+            });
+            requestAnimationFrame(tick);
+        })();
+    })();
+
+    window.initParticles = function(canvas, options) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const interactive = options.interactive !== false;
+        const count = options.count || (interactive ? 55 : 18);
+        let mx = -1000, my = -1000;
+        const particles = Array.from({ length: count }, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+            size: Math.random() * 2.5 + 0.8, alpha: Math.random() * 0.3 + 0.08
+        }));
+        if (interactive) {
+            canvas.addEventListener('mousemove', (e) => { const rect = canvas.getBoundingClientRect(); mx = e.clientX - rect.left; my = e.clientY - rect.top; });
+            canvas.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
+        }
+        (function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                if (interactive) {
+                    const dx = p.x - mx, dy = p.y - my, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) { const force = (120 - dist) / 120 * 2; p.vx += (dx / dist) * force * 0.1; p.vy += (dy / dist) * force * 0.1; }
+                }
+                p.vx *= 0.98; p.vy *= 0.98; p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(126,184,74,${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+
+    document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c, { interactive: true, count: 55 }));
+    document.querySelectorAll('.particle-canvas-ambient').forEach(c => window.initParticles(c, { interactive: false, count: 18 }));
+
+    try { animateSlide(document.querySelector('.slide.active')); } catch(e) { console.warn(e); }
+</script>
+</body>
+</html>
