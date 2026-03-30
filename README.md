@@ -44,6 +44,8 @@ We measure success through a multi-dimensional framework aligned to each domain:
 
 **[https://edwardslamont616-cell.github.io/](https://edwardslamont616-cell.github.io/)**
 
+🌱 **Roots of the Land — CEA Investor Narrative:** [View Presentation](https://edwardslamont616-cell.github.io/roots_of_the_land_cea_narrative.html)
+
 The site showcases two core collections:
 
 ### Python & Agent Systems
