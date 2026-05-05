@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Framework Guide</title>
+    <style>
+        :root {
+            --color-bg-primary: #ffffff;
+            --color-bg-secondary: #f5f5f7;
+            --color-bg-card: #ffffff;
+            --color-text-primary: #1d1d1f;
+            --color-text-secondary: #6e6e73;
+            --color-accent: #0071e3;
+            --color-accent-hover: #0077ed;
+            --color-border: #d2d2d7;
+            --color-success: #34c759;
+            --color-warning: #ff9500;
+            --color-error: #ff3b30;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg-primary: #000000;
+                --color-bg-secondary: #1c1c1e;
+                --color-bg-card: #2c2c2e;
+                --color-text-primary: #f5f5f7;
+                --color-text-secondary: #a1a1a6;
+                --color-border: #38383a;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: var(--color-bg-card);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            header {
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .lang-selector {
+            padding: 8px 16px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lang-selector:hover {
+            border-color: var(--color-accent);
+        }
+
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 60px 0;
+        }
+
+        .framework-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .framework-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent);
+        }
+
+        .framework-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-basic {
+            background: rgba(52, 199, 89, 0.1);
+            color: var(--color-success);
+        }
+
+        .badge-intermediate {
+            background: rgba(255, 149, 0, 0.1);
+            color: var(--color-warning);
+        }
+
+        .badge-advanced {
+            background: rgba(0, 113, 227, 0.1);
+            color: var(--color-accent);
+        }
+
+        .framework-card h3 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .framework-card .acronym {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .framework-card p {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .modal-content {
+            background: var(--color-bg-card);
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 48px;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--color-bg-secondary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: var(--color-border);
+            color: var(--color-text-primary);
+        }
+
+        .modal-content h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .component-list {
+            margin: 32px 0;
+        }
+
+        .component-item {
+            background: var(--color-bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .component-item strong {
+            color: var(--color-accent);
+            font-size: 18px;
+        }
+
+        .template-box {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .use-cases {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .use-case-tag {
+            background: var(--color-bg-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .section {
+            margin: 40px 0;
+        }
+
+        .section h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            color: var(--color-text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-accent);
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        footer {
+            background: var(--color-bg-card);
+            border-top: 1px solid var(--color-border);
+            padding: 40px 0;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .modal-content {
+                padding: 32px 24px;
+            }
+
+            .framework-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .comparison-table th {
+            background: var(--color-bg-secondary);
+            font-weight: 600;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            padding: 16px 24px;
+            font-size: 18px;
+            border: 2px solid var(--color-border);
+            border-radius: 24px;
+            background: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            transition: var(--transition);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">AI Prompt Frameworks</div>
+            <ul class="nav-links">
+                <li><a href="#frameworks">Frameworks</a></li>
+                <li><a href="#comparison">Compare</a></li>
+                <li><a href="#guide">Guide</a></li>
+            </ul>
+            <select class="lang-selector" id="langSelector">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+            </select>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Master AI Prompt Engineering</h1>
+                <p>Learn 9 essential frameworks to unlock the full potential of AI systems with structured, professional approaches</p>
+                <input type="text" class="search-box" id="searchBox" placeholder="Search frameworks..." aria-label="Search frameworks">
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">All Frameworks</button>
+                <button class="filter-btn" data-filter="basic">Basic</button>
+                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
+            </div>
+
+            <div class="framework-grid" id="frameworkGrid"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Studio WEB Development Team, Grand Rapids, Michigan</p>
+            <p style="margin-top: 8px; font-size: 12px;">Designed for accessibility and universal access</p>
+        </div>
+    </footer>
+
+    <div class="modal" id="frameworkModal">
+        <div class="modal-content" id="modalContent">
+            <button class="close-modal" id="closeModal" aria-label="Close modal">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        const frameworks = [
+            {
+                name: 'TAG',
+                level: 'basic',
+                acronym: 'Task • Action • Goal',
+                description: 'Streamlined framework for targeted, goal-oriented communications',
+                components: [
+                    { letter: 'T', name: 'Task', detail: 'Define what needs to be accomplished' },
+                    { letter: 'A', name: 'Action', detail: 'Specify how it should be done' },
+                    { letter: 'G', name: 'Goal', detail: 'Articulate the desired outcome or purpose' }
+                ],
+                useCases: ['Marketing communications', 'Social media content', 'Email campaigns', 'Targeted messaging'],
+                template: `Task: Create a LinkedIn post announcing new features\nAction: Write 150-200 words with bullet points and hashtags\nGoal: Generate engagement and drive traffic to landing page`,
+                whenToUse: 'Ideal for marketing campaigns, targeted messaging to specific audiences, social media content creation, and quick focused content generation.'
+            },
+            {
+                name: 'BAB',
+                level: 'basic',
+                acronym: 'Before • After • Bridge',
+                description: 'Narrative-based persuasion framework for transformation storytelling',
+                components: [
+                    { letter: 'B', name: 'Before', detail: 'Describe the current problem or pain point' },
+                    { letter: 'A', name: 'After', detail: 'Paint a picture of the improved state' },
+                    { letter: 'B', name: 'Bridge', detail: 'Explain how to get from Before to After' }
+                ],
+                useCases: ['Sales copy', 'Landing pages', 'Case studies', 'Product descriptions', 'Persuasive content'],
+                template: `Before: Healthcare practices struggle with outdated portals\nAfter: Intuitive portal with 35-point satisfaction increase\nBridge: 8-12 week redesign process with user research and training`,
+                whenToUse: 'Perfect for sales copy and landing pages, persuasive marketing content, case studies and testimonials, and any content requiring problem-solution narratives.'
+            },
+            {
+                name: 'COT',
+                level: 'basic',
+                acronym: 'Chain of Thought',
+                description: 'Reasoning-focused approach requesting explicit step-by-step logic',
+                components: [
+                    { letter: 'C', name: 'Chain', detail: 'Request explicit reasoning process' },
+                    { letter: 'O', name: 'Of', detail: 'Break problems into logical steps' },
+                    { letter: 'T', name: 'Thought', detail: 'Show work and explain conclusions' }
+                ],
+                useCases: ['Complex problem-solving', 'Mathematical calculations', 'Debugging', 'Educational contexts'],
+                template: `Please think through this step-by-step:\n1. Calculate total costs\n2. Identify non-financial factors\n3. Determine break-even point\n4. Make recommendation with reasoning`,
+                whenToUse: 'Essential for complex problem-solving requiring logical reasoning, mathematical calculations, debugging technical issues, and situations where understanding the reasoning process is valuable.'
+            },
+            {
+                name: 'RACE',
+                level: 'intermediate',
+                acronym: 'Role • Action • Context • Expectation',
+                description: 'Streamlined framework optimized for professional business communications',
+                components: [
+                    { letter: 'R', name: 'Role', detail: 'Define the AI\'s professional persona and expertise' },
+                    { letter: 'A', name: 'Action', detail: 'Specify the task or deliverable to be produced' },
+                    { letter: 'C', name: 'Context', detail: 'Provide situational background and relevant information' },
+                    { letter: 'E', name: 'Expectation', detail: 'Clarify desired outcomes, format, and success criteria' }
+                ],
+                useCases: ['Business communications', 'Status reports', 'Professional emails', 'Meeting agendas', 'Project updates'],
+                template: `Role: Act as project manager\nAction: Create weekly status report\nContext: Week 6 of 8, completed scheduling module\nExpectation: Professional 300-400 word email format`,
+                whenToUse: 'Optimal for standard business communications and documentation, professional email and memo drafting, meeting agendas and summaries, and internal team communications.'
+            },
+            {
+                name: 'RISE',
+                level: 'intermediate',
+                acronym: 'Role • Input • Steps • Expectation',
+                description: 'Systematic framework for analytical problem-solving and debugging',
+                components: [
+                    { letter: 'R', name: 'Role', detail: 'Define the analytical or technical expert persona' },
+                    { letter: 'I', name: 'Input', detail: 'Provide data, information, or problem parameters' },
+                    { letter: 'S', name: 'Steps', detail: 'Request explicit methodology or step-by-step process' },
+                    { letter: 'E', name: 'Expectation', detail: 'Specify desired output format and end goal' }
+                ],
+                useCases: ['Debugging', 'Technical troubleshooting', 'Data analysis', 'Process documentation', 'Analytical tasks'],
+                template: `Role: Senior performance engineer\nInput: Dashboard loads in 4-6 seconds, 4 sequential API calls\nSteps: Systematic debugging and optimization approach\nExpectation: Root cause analysis with prioritized recommendations`,
+                whenToUse: 'Best for debugging and troubleshooting technical issues, analytical problem-solving requiring systematic approaches, data analysis and interpretation, and process documentation.'
+            },
+            {
+                name: 'CARE',
+                level: 'intermediate',
+                acronym: 'Context • Action • Result • Example',
+                description: 'Documentation-focused framework with emphasis on concrete examples',
+                components: [
+                    { letter: 'C', name: 'Context', detail: 'Establish background, purpose, and situational information' },
+                    { letter: 'A', name: 'Action', detail: 'Define the specific task, process, or implementation' },
+                    { letter: 'R', name: 'Result', detail: 'Describe expected outcomes, outputs, or effects' },
+                    { letter: 'E', name: 'Example', detail: 'Provide concrete code samples or demonstrations' }
+                ],
+                useCases: ['Technical documentation', 'API guides', 'Component docs', 'Tutorials', 'Code examples'],
+                template: `Context: FormInput component used across 15 forms\nAction: Create comprehensive component documentation\nResult: Enables correct implementation without questions\nExample: Include JSX code for 4 common scenarios`,
+                whenToUse: 'Ideal for technical documentation and API guides, component library documentation, engineering specifications, tutorial and how-to content, and developer-facing materials.'
+            },
+            {
+                name: 'ROSES v2',
+                level: 'intermediate',
+                acronym: 'Role • Objective • Style • Example • Scenario',
+                description: 'Framework designed for creative content with strong style control',
+                components: [
+                    { letter: 'R', name: 'Role', detail: 'Define who the AI should act as' },
+                    { letter: 'O', name: 'Objective', detail: 'Specify what you want to achieve' },
+                    { letter: 'S', name: 'Style', detail: 'Describe the communication style' },
+                    { letter: 'E', name: 'Example', detail: 'Provide reference examples' },
+                    { letter: 'S', name: 'Scenario', detail: 'Set the context' }
+                ],
+                useCases: ['Brand messaging', 'Creative content', 'Marketing materials', 'Design briefs', 'Branded communications'],
+                template: `Role: Senior brand strategist for sustainable food tech\nObjective: Create compelling mission statement\nStyle: Inspirational yet authentic, conversational professional\nExample: Patagonia - "We're in business to save our home planet"\nScenario: Plant-based preservation tech, launching next quarter`,
+                whenToUse: 'Perfect for creative content requiring specific stylistic attributes, brand-aligned communications, content matching established examples, and scenarios where tone and voice are critical.'
+            },
+            {
+                name: 'CRISPE',
+                level: 'advanced',
+                acronym: 'Capacity • Role • Insight • Statement • Personality • Experiment',
+                description: 'Advanced framework for innovation, R&D, and experimental projects',
+                components: [
+                    { letter: 'C', name: 'Capacity', detail: 'Establish AI capabilities and knowledge domains' },
+                    { letter: 'R', name: 'Role', detail: 'Define specialized expert persona' },
+                    { letter: 'I', name: 'Insight', detail: 'Provide key background information' },
+                    { letter: 'S', name: 'Statement', detail: 'Articulate specific request or problem' },
+                    { letter: 'P', name: 'Personality', detail: 'Set communication style and approach' },
+                    { letter: 'E', name: 'Experiment', detail: 'Request variations and exploratory approaches' }
+                ],
+                useCases: ['Innovation initiatives', 'R&D projects', 'Complex problem-solving', 'Exploratory thinking', 'Multiple approaches'],
+                template: `Capacity: Food science, consumer behavior, packaging trends\nRole: Food innovation strategist\nInsight: Bio-coating extends shelf life 300% at room temp\nStatement: Develop 3 go-to-market strategies\nPersonality: Scientist-marketer blend, analytical yet creative\nExperiment: Provide conservative and bold alternatives for each`,
+                whenToUse: 'Essential for innovation initiatives requiring novel solutions, research and development projects, complex problem-solving with multiple potential approaches, and scenarios requiring exploratory thinking.'
+            },
+            {
+                name: 'Co-STAR',
+                level: 'advanced',
+                acronym: 'Context • Objective • Style • Tone • Audience • Response',
+                description: 'Most comprehensive framework for complex multi-stakeholder communications',
+                components: [
+                    { letter: 'C', name: 'Context', detail: 'Establish full situational background' },
+                    { letter: 'O', name: 'Objective', detail: 'Define specific, measurable goals' },
+                    { letter: 'S', name: 'Style', detail: 'Specify communication style' },
+                    { letter: 'T', name: 'Tone', detail: 'Set emotional quality' },
+                    { letter: 'A', name: 'Audience', detail: 'Identify and characterize recipients' },
+                    { letter: 'R', name: 'Response', detail: 'Define desired output format' }
+                ],
+                useCases: ['Executive communications', 'Strategic proposals', 'Multi-stakeholder projects', 'High-stakes presentations', 'Complex roadmaps'],
+                template: `Context: 18-month relationship, $2M multi-year engagement\nObjective: Secure approval, position as strategic partner\nStyle: Professional executive communication, data-driven\nTone: Confident, collaborative, forward-thinking, pragmatic\nAudience: CIO (technical), CFO (ROI), CMO (experience), CEO (strategic)\nResponse: 2-page executive summary with stakeholder value drivers`,
+                whenToUse: 'Critical for executive-level communications with multiple stakeholders, complex proposals requiring precise messaging control, high-stakes presentations, and cross-functional projects with diverse audience needs.'
+            }
+        ];
+
+        const frameworkGrid = document.getElementById('frameworkGrid');
+        const modal = document.getElementById('frameworkModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const searchBox = document.getElementById('searchBox');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function renderFrameworks() {
+            frameworkGrid.innerHTML = '';
+            const filtered = frameworks.filter(fw => {
+                const matchesFilter = currentFilter === 'all' || fw.level === currentFilter;
+                const matchesSearch = searchTerm === '' || 
+                    fw.name.toLowerCase().includes(searchTerm) ||
+                    fw.description.toLowerCase().includes(searchTerm) ||
+                    fw.useCases.some(uc => uc.toLowerCase().includes(searchTerm));
+                return matchesFilter && matchesSearch;
+            });
+
+            filtered.forEach(framework => {
+                const card = document.createElement('div');
+                card.className = 'framework-card';
+                card.innerHTML = `
+                    <span class="framework-badge badge-${framework.level}">${framework.level.toUpperCase()}</span>
+                    <h3>${framework.name}</h3>
+                    <div class="acronym">${framework.acronym}</div>
+                    <p>${framework.description}</p>
+                `;
+                card.onclick = () => openModal(framework);
+                frameworkGrid.appendChild(card);
+            });
+        }
+
+        function openModal(framework) {
+            const componentsList = framework.components.map(comp => `
+                <div class="component-item">
+                    <strong>${comp.letter} - ${comp.name}:</strong> ${comp.detail}
+                </div>
+            `).join('');
+
+            const useCasesList = framework.useCases.map(uc => `
+                <span class="use-case-tag">${uc}</span>
+            `).join('');
+
+            modalContent.innerHTML = `
+                <button class="close-modal" id="closeModalBtn" aria-label="Close modal">&times;</button>
+                <span class="framework-badge badge-${framework.level}">${framework.level.toUpperCase()}</span>
+                <h2>${framework.name}</h2>
+                <div class="acronym" style="font-size: 18px; margin-bottom: 24px;">${framework.acronym}</div>
+                <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 32px;">${framework.description}</p>
+                
+                <div class="section">
+                    <h3>Components</h3>
+                    <div class="component-list">${componentsList}</div>
+                </div>
+
+                <div class="section">
+                    <h3>When to Use</h3>
+                    <p>${framework.whenToUse}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Best For</h3>
+                    <div class="use-cases">${useCasesList}</div>
+                </div>
+
+                <div class="section">
+                    <h3>Template Example</h3>
+                    <div class="template-box">${framework.template.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.getElementById('closeModalBtn').onclick = closeModalFunc;
+        }
+
+        function closeModalFunc() {
+            modal.classList.remove('active');
+        }
+
+        closeModal.onclick = closeModalFunc;
+        modal.onclick = (e) => {
+            if (e.target === modal) closeModalFunc();
+        };
+
+        searchBox.addEventListener('input', (e) => {
+            searchTerm = e.target.value.toLowerCase();
+            renderFrameworks();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderFrameworks();
+            });
+        });
+
+        document.getElementById('langSelector').addEventListener('change', (e) => {
+            const lang = e.target.value;
+            const messages = {
+                en: 'Language support coming soon!',
+                es: '¡Soporte de idioma próximamente!',
+                fr: 'Support linguistique à venir!',
+                de: 'Sprachunterstützung demnächst!',
+                zh: '语言支持即将推出！',
+                ja: '言語サポート近日公開！'
+            };
+            alert(messages[lang] || messages.en);
+        });
+
+        renderFrameworks();
+    </script>
+</body>
+</html>
