@@ -69,6 +69,8 @@ The site showcases two core collections:
 
 ## 🛠️ Technology Stack
 
+https://edwardslamont616-cell.github.io/Prompt%20Framework%20Guide%20(1).html
+
 - **Agent Frameworks:** LLM Orchestration, HTTP APIs, Autonomous Agents
 - **Data & Forecasting:** Python, pandas, numpy, uni2ts/Moirai, Plotly
 - **Desktop Tools:** Tkinter, PyQt, BIM Metrics integration
